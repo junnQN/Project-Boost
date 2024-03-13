@@ -5,6 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float mainThrust = 100f;
+    [SerializeField] private float rotationThrust = 1f;
     private Rigidbody rb;
     
     // Start is called before the first frame update
@@ -34,12 +35,19 @@ public class Movement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A))
         {
-            Debug.Log("Rotating Left");
+            ApplyRotation(rotationThrust);
         }
 
         else if (Input.GetKey(KeyCode.D))
         {
-            Debug.Log("Rotating Right");
+            ApplyRotation(-rotationThrust);
         }
+    }
+
+    private void ApplyRotation(float rotationThisFrame)
+    {
+        rb.freezeRotation = true; // freezing rotation so we can manually rotate
+        transform.Rotate(Vector3.forward * rotationThisFrame * Time.deltaTime);
+        rb.freezeRotation = false; // unfreezing rotation so the physics system can take over
     }
 }
